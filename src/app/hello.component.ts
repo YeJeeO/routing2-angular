@@ -1,11 +1,16 @@
-import { Component, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { HomeService } from './home.Service';
 
 @Component({
-  selector: 'hello',
-  template: `<h1>Hello {{name}}!</h1>`,
-  styles: [`h1 { font-family: Lato; }`]
+  selector: 'app-hello',
+  templateUrl: `hello.component.html`,
 })
-export class HelloComponent  {
-  @Input() name: string;
-
+export class HelloComponent implements OnInit {
+  comments: any;
+  constructor(private homeService: HomeService) {}
+  ngOnInit() {
+    this.homeService.getComments().subscribe((data) => {
+      this.comments = data.results;
+    });
+  }
 }

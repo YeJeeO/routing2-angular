@@ -1,16 +1,18 @@
-import './polyfills';
-
-import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
 import { AppModule } from './app/app.module';
 
-platformBrowserDynamic().bootstrapModule(AppModule).then(ref => {
-  // Ensure Angular destroys itself on hot reloads.
-  if (window['ngRef']) {
-    window['ngRef'].destroy();
-  }
-  window['ngRef'] = ref;
+interface CustomWindow extends Window {
+  ngRef?: any;
+}
 
-  // Otherwise, log the boot error
-}).catch(err => console.error(err));
+const customWindow: CustomWindow = window;
+
+platformBrowserDynamic()
+  .bootstrapModule(AppModule)
+  .then((ref) => {
+    if (customWindow.ngRef) {
+      customWindow.ngRef.destroy();
+    }
+    customWindow.ngRef = ref;
+  })
+  .catch((err) => console.error(err));
